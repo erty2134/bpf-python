@@ -28,21 +28,21 @@ IOC_IN: ctypes.c_uint32 = ctypes.c_uint32(0x80000000)
 IOC_INOUT = ctypes.c_uint32(IOC_IN.value|IOC_OUT.value)
 
 
-def _ioc(inout, group, num, len) -> ctypes.c_uint32:
+def ioc(inout, group, num, len) -> ctypes.c_uint32:
     return ctypes.c_uint32(inout.value | ((len & IOCPARM_MASK.value) << 16) | (ord(group) << 8) | (num))
 
-def _io(g, n) -> ctypes.c_uint32:
-    return _ioc(IOC_VOID, (g), (n), 0)
+def io(g, n) -> ctypes.c_uint32:
+    return ioc(IOC_VOID, (g), (n), 0)
 
-def _ior(g, n, t) -> ctypes.c_uint32:
-    return _ioc(IOC_OUT, (g), (n), ctypes.sizeof(t))
+def ior(g, n, t) -> ctypes.c_uint32:
+    return ioc(IOC_OUT, (g), (n), ctypes.sizeof(t))
 
-def _iow(g, n, t) -> ctypes.c_uint32:
-    return _ioc(IOC_IN, (g), (n), ctypes.sizeof(t))
+def iow(g, n, t) -> ctypes.c_uint32:
+    return ioc(IOC_IN, (g), (n), ctypes.sizeof(t))
 
 # this should be _IORW, but stdio got there first # but we dont got stdlib but to keep it consisnent we going with _IOWR
-def _iowr(g, n, t) -> ctypes.c_uint32:
-    return _ioc(IOC_INOUT, (g), (n), ctypes.sizeof(t))
+def iowr(g, n, t) -> ctypes.c_uint32:
+    return ioc(IOC_INOUT, (g), (n), ctypes.sizeof(t))
 
 
 def main():
@@ -51,16 +51,16 @@ def main():
             ("x", ctypes.c_uint32)
         ]
 
-    iowr_test: ctypes.c_uint32 = _iowr('M', 1, ioctl_data);
+    iowr_test: ctypes.c_uint32 = iowr('M', 1, ioctl_data);
     print("iowr_test",iowr_test.value)
 
-    io_test = _io('M',2)
+    io_test = io('M',2)
     print("io_test",io_test.value)
     
-    ior_test = _ior('M',2,ioctl_data)
+    ior_test = ior('M',2,ioctl_data)
     print("ior_test",ior_test.value)
 
-    iow_test = _iow('M',2,ioctl_data)
+    iow_test = iow('M',2,ioctl_data)
     print("iow_test",iow_test.value)
 
 
