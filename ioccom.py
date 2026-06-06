@@ -5,6 +5,8 @@ import ctypes
 # any in or out parameters in the upper word.  The high 3 bits of the
 # upper word are used to encode the in/out status of the parameter.
 
+type __uint32_t = ctypes.c_uint32
+
 IOCPARM_MASK: int = ctypes.c_uint32(0x1fff) # parameter length, at most 13 bits
 
 def iocparm_len(x: int) -> ctypes.c_uint32:
