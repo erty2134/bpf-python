@@ -1,7 +1,7 @@
 import ctypes
 import ioccom
 from socket_ import *
-from timeval32 import *
+from timeval import *
 
 IFNAMSIZ = 16
 bpf_int32 = ctypes.c_int32
@@ -56,24 +56,24 @@ class bpf_version(ctypes.Structure):
         ("bv_minor", ctypes.c_ushort)
     ]
 
-class ifr_ifru(ctypes.Union): # i dont think we need this union,
-    _fields_ = [
-        ("ifru_addr", sockaddr),
-        ("ifru_dstaddr", sockaddr),
-        ("ifru_broadaddr", sockaddr),
-        ("ifru_flags", ctypes.c_short),
-        ("ifru_metric", ctypes.c_int),
-        ("ifru_mtu", ctypes.c_int),
-        ("ifru_phys", ctypes.c_int),
-        ("ifru_media", ctypes.c_int),
-        ("ifru_intval", ctypes.c_int),
-
-    ]
+#class ifr_ifru(ctypes.Union): # i dont think we need this union,
+#    _fields_ = [
+#        ("ifru_addr", sockaddr),
+#        ("ifru_dstaddr", sockaddr),
+#        ("ifru_broadaddr", sockaddr),
+#        ("ifru_flags", ctypes.c_short),
+#        ("ifru_metric", ctypes.c_int),
+#        ("ifru_mtu", ctypes.c_int),
+#        ("ifru_phys", ctypes.c_int),
+#        ("ifru_media", ctypes.c_int),
+#        ("ifru_intval", ctypes.c_int),
+#
+#    ]
 class ifreq(ctypes.Structure):
     _fields_ = [
         ("ifr_name", ctypes.c_char * IFNAMSIZ),
-        ("ifr_ifru", ctypes.c_ubyte * 16),
-        ("other_data", ctypes.c_ubyte * 15)
+        ("ifr_ifru", ctypes.c_ubyte * 16)
+        # macros dont take memory, so only these are used
     ]
 
 # Structure to retrieve available DLTs for the interface.
@@ -111,25 +111,28 @@ BIOCSDLT = ioccom.iow('B',120, ctypes.c_uint).value
 BIOCGDLTLIST = ioccom.iowr('B',121, bpf_dltlist).value
 BIOCSETFNR = ioccom.iow('B', 126, bpf_program).value
 
-print(BIOCGBLEN,
-BIOCSBLEN,
-"BIOCSETF",
-BIOCFLUSH,
-BIOCPROMISC,
-BIOCGDLT,
-BIOCGETIF,
-BIOCSETIF,
-BIOCSRTIMEOUT,
-BIOCGRTIMEOUT,
-BIOCGSTATS,
-BIOCIMMEDIATE,
-BIOCVERSION,
-BIOCGRSIG,
-BIOCSRSIG,
-BIOCGHDRCMPLT,
-BIOCSHDRCMPLT,
-BIOCGSEESENT,
-BIOCSSEESENT,
-BIOCSDLT,
-BIOCGDLTLIST,
-BIOCSETFNR, sep="\n")
+print(BIOCSRTIMEOUT)
+print(ctypes.sizeof(timeval))
+
+#print(BIOCGBLEN,
+#BIOCSBLEN,
+#"BIOCSETF",
+#BIOCFLUSH,
+#BIOCPROMISC,
+#BIOCGDLT,
+#BIOCGETIF,
+#BIOCSETIF,
+#BIOCSRTIMEOUT,
+#BIOCGRTIMEOUT,
+#BIOCGSTATS,
+#BIOCIMMEDIATE,
+#BIOCVERSION,
+#BIOCGRSIG,
+#BIOCSRSIG,
+#BIOCGHDRCMPLT,
+#BIOCSHDRCMPLT,
+#BIOCGSEESENT,
+#BIOCSSEESENT,
+#BIOCSDLT,
+#BIOCGDLTLIST,
+#BIOCSETFNR, sep="\n")

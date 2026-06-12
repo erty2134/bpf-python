@@ -32,7 +32,9 @@ int main(){
     printf("size of ifreq: %lu\n", sizeof(ifr));
     printf("size of ifreq ifr_ifru: %lu\n", sizeof(ifr.ifr_ifru));
     */
-    printf("%lu\n", BIOCSETFNR);
+    printf("%lu\n", BIOCSRTIMEOUT);
+    printf("%zu\n", sizeof(struct timeval));
+    printf("%zu\n", sizeof(struct timeval32));
     //printf("%d\n%d\nBIOCSETF\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",BIOCGBLEN,BIOCSBLEN,BIOCFLUSH,BIOCPROMISC,BIOCGDLT,BIOCGETIF,BIOCSETIF,BIOCSRTIMEOUT,BIOCGRTIMEOUT,BIOCGSTATS,BIOCIMMEDIATE,BIOCVERSION,BIOCGRSIG,BIOCSRSIG,BIOCGHDRCMPLT,BIOCSHDRCMPLT,BIOCGSEESENT,BIOCSSEESENT,BIOCSDLT,BIOCGDLTLIST,BIOCSETFNR);
     return 0;
 }
