@@ -23,14 +23,17 @@ BPF_MAXBUFSIZE = 0x80000
 BPF_MINBUFSIZE = 32
 
 class bf_insns(ctypes.Structure):
-    # DO LATER
-    ...
-
+    _fields_ = [
+        ("code", ctypes.c_ushort),
+        ("jt", ctypes.c_char),
+        ("jf", ctypes.c_char),
+        ("k", bpf_u_int32)
+    ]
 # Structure for BIOCSETF.
 class bpf_program(ctypes.Structure):
     _fields_ = [
-        #("bpf_len", ctypes.c_uint),
-        #("bpf_insn", ctypes.POINTER(bf_insns()))
+        ("bpf_len", ctypes.c_uint),
+        ("bpf_insn", ctypes.POINTER(bf_insns))
         # come back to struct bpf_insn *bf_insns; later...
     ]
 
@@ -78,11 +81,15 @@ class ifreq(ctypes.Structure):
 
 # Structure to retrieve available DLTs for the interface.
 class bfl_u(ctypes.Union):
+    _layout_ = "ms" # pack only works with micrsoft abi layout although clang uses gcc-syssv
+    _pack_ = 4 # pragma pack (4)
     _fields_ = [
         ("bflu_list", ctypes.POINTER(ctypes.c_uint32)),
         ("bflu_pad", ctypes.c_uint64)
     ]
 class bpf_dltlist(ctypes.Structure):
+    _layout_ = "ms" # pack only works with micrsoft abi layout although clang uses gcc-syssv
+    _pack_ = 4 # pragma pack(4)
     _fields_ = [
         ("bfl_len", ctypes.c_uint32),
         ("bfl_u", bfl_u)
@@ -90,7 +97,7 @@ class bpf_dltlist(ctypes.Structure):
 
 BIOCGBLEN = ioccom.ior('B',102, ctypes.c_uint).value
 BIOCSBLEN = ioccom.iowr('B',102, ctypes.c_uint).value
-#BIOCSETF = ioccom.iow('B',103, bpf_program()).value
+BIOCSETF = ioccom.iow('B',103, bpf_program).value
 BIOCFLUSH = ioccom.io('B',104).value
 BIOCPROMISC = ioccom.io('B',105).value
 BIOCGDLT = ioccom.ior('B',106, ctypes.c_uint).value
@@ -111,28 +118,6 @@ BIOCSDLT = ioccom.iow('B',120, ctypes.c_uint).value
 BIOCGDLTLIST = ioccom.iowr('B',121, bpf_dltlist).value
 BIOCSETFNR = ioccom.iow('B', 126, bpf_program).value
 
-print(BIOCSRTIMEOUT)
-print(ctypes.sizeof(timeval))
+#print(BIOCGDLTLIST)
 
-#print(BIOCGBLEN,
-#BIOCSBLEN,
-#"BIOCSETF",
-#BIOCFLUSH,
-#BIOCPROMISC,
-#BIOCGDLT,
-#BIOCGETIF,
-#BIOCSETIF,
-#BIOCSRTIMEOUT,
-#BIOCGRTIMEOUT,
-#BIOCGSTATS,
-#BIOCIMMEDIATE,
-#BIOCVERSION,
-#BIOCGRSIG,
-#BIOCSRSIG,
-#BIOCGHDRCMPLT,
-#BIOCSHDRCMPLT,
-#BIOCGSEESENT,
-#BIOCSSEESENT,
-#BIOCSDLT,
-#BIOCGDLTLIST,
-#BIOCSETFNR, sep="\n")
+print(BIOCGBLEN,BIOCSBLEN,BIOCSETF,BIOCFLUSH,BIOCPROMISC,BIOCGDLT,BIOCGETIF,BIOCSETIF,BIOCSRTIMEOUT,BIOCGRTIMEOUT,BIOCGSTATS,BIOCIMMEDIATE,BIOCVERSION,BIOCGRSIG,BIOCSRSIG,BIOCGHDRCMPLT,BIOCSHDRCMPLT,BIOCGSEESENT,BIOCSSEESENT,BIOCSDLT,BIOCGDLTLIST,BIOCSETFNR, sep="\n")
